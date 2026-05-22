@@ -1,0 +1,23 @@
+baseURL = "https://palSagnik.github.io/core-dump/"
+languageCode = "en-us"
+title = "My Blog"
+theme = "mytheme"
+
+[pagination]
+  pagerSize = 10
+
+[params]
+  description = "A minimal blog"
+  author = "Sagnik Pal"
+  showReadingTime = true
+
+[markup]
+  [markup.highlight]
+    style = "github-dark"
+    lineNos = false
+  [markup.goldmark.renderer]
+    unsafe = true  # allows raw HTML in markdown if needed
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
