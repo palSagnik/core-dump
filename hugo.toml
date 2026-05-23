@@ -1,23 +1,51 @@
 baseURL = "https://palSagnik.github.io/core-dump/"
-languageCode = "en-us"
-title = "My Blog"
-theme = "mytheme"
+locale = "en-us"
+title = "core-dump"
+theme = "stdout"
 
 [pagination]
   pagerSize = 10
 
+[outputs]
+  home = ["HTML", "JSON"]
+
 [params]
-  description = "A minimal blog"
+  description = "A minimal dev blog"
   author = "Sagnik Pal"
   showReadingTime = true
 
 [markup]
   [markup.highlight]
-    style = "github-dark"
+    style = "vim"
     lineNos = false
+    noClasses = true
   [markup.goldmark.renderer]
-    unsafe = true  # allows raw HTML in markdown if needed
+    unsafe = true
 
 [taxonomies]
   tag = "tags"
-  category = "categories"
+
+[[menus.main]]
+  name    = "home"
+  pageRef = "/"
+  weight  = 1
+
+[[menus.main]]
+  name    = "log"
+  pageRef = "posts"
+  weight  = 2
+
+[[menus.main]]
+  name    = "tags"
+  pageRef = "tags"
+  weight  = 3
+
+[[menus.main]]
+  name    = "about"
+  pageRef = "about"
+  weight  = 4
+
+[[menus.main]]
+  name    = "search"
+  pageRef = "search"
+  weight  = 5

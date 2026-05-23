@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Locale | default "en" }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    {{- if .IsHome -}}
+      {{ .Site.Title }}
+    {{- else -}}
+      {{ .Title }} — {{ .Site.Title }}
+    {{- end -}}
+  </title>
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
+
+  {{ $css := resources.Get "css/main.css" | minify }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" />
+
+  {{ if .Site.Params.favicon }}
+  <link rel="icon" href="{{ .Site.Params.favicon }}" />
+  {{ end }}
+</head>
+<body>
+
+<div id="root">
+  <div class="screen-stage">
+    <div class="piplog-root">
+
+      <!-- Boot screen — shown only on first visit (sessionStorage gated) -->
+      <div id="boot-screen">
+        <div class="boot-title">{{ .Site.Title }}</div>
+        <div class="boot-sub">(c) 2026 NUGGET INDUSTRIES &middot; all rights reserved</div>
+        <div class="boot-lines" id="boot-lines"></div>
+        <div class="boot-skip">press any key (or tap) to skip</div>
+      </div>
+
+      <!-- Header: logo + live clock + tab bar -->
+      <header class="pip-header">
+        <div class="pip-header-top">
+          <div class="pip-header-left">
+            <a href="{{ .Site.BaseURL }}" class="pip-logo">{{ .Site.Title }}</a>
+          </div>
+          <span class="pip-clock" id="pip-clock">
+            <span id="pip-hhmm">00:00</span><span class="sec" id="pip-sec">:00</span>
+          </span>
+        </div>
+
+        <nav class="pip-tabs">
+          {{ $p := . }}
+          {{ range .Site.Menus.main }}
+          {{ $active := or ($p.IsMenuCurrent "main" .) ($p.HasMenuCurrent "main" .) }}
+          <a href="{{ .URL }}" class="pip-tab{{ if $active }} active{{ end }}">
+            <span class="pip-tab-key">[{{ .Weight }}]</span>{{ .Name | upper }}
+          </a>
+          {{ end }}
+          <div class="pip-tabs-filler"></div>
+        </nav>
+      </header>
+
+      <!-- Main content -->
+      <main class="pip-content" id="pip-main">
+        {{ block "main" . }}{{ end }}
+      </main>
+
+      <!-- Footer: context-sensitive hints + ONLINE -->
+      <footer class="pip-footer">
+        <span class="pip-footer-hints" id="pip-hints">
+          {{- if .IsHome -}}
+            [1&#x2013;5] switch tab &nbsp;&middot;&nbsp; [/] search log
+          {{- else if (eq .Type "posts") -}}
+            [&uarr;&darr;] select &nbsp;&middot;&nbsp; [enter] open &nbsp;&middot;&nbsp; [/] search &nbsp;&middot;&nbsp; [1&#x2013;5] tab
+          {{- else -}}
+            [esc] back &nbsp;&middot;&nbsp; [1&#x2013;5] tab
+          {{- end -}}
+        </span>
+        <span class="pip-footer-status"><span class="spinner">&#x25A0;</span> ONLINE</span>
+      </footer>
+
+    </div><!-- .piplog-root -->
+  </div><!-- .screen-stage -->
+</div><!-- #root -->
+
+<script src="/js/nav.js" defer></script>
+<script src="/js/search.js" defer></script>
+
+<!-- Live clock -->
+<script>
+(function() {
+  var hhmm = document.getElementById('pip-hhmm');
+  var sec  = document.getElementById('pip-sec');
+  if (!hhmm || !sec) return;
+  function tick() {
+    var d  = new Date();
+    var hh = String(d.getHours()).padStart(2,'0');
+    var mm = String(d.getMinutes()).padStart(2,'0');
+    var ss = String(d.getSeconds()).padStart(2,'0');
+    hhmm.textContent = hh + ':' + mm;
+    sec.textContent  = ':' + ss;
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+
+<!-- Boot sequence (sessionStorage-gated, first visit only) -->
+<script>
+(function() {
+  var screen = document.getElementById('boot-screen');
+  if (!screen) return;
+
+  if (sessionStorage.getItem('piplog-booted')) {
+    screen.style.display = 'none';
+    return;
+  }
+  sessionStorage.setItem('piplog-booted', '1');
+
+  var lines = [
+    ['<span class="hi">{{ .Site.Title }}</span><span class="dim"> :: cold start</span>', 60],
+    ['<span class="dim">checking RAM ................... 640k </span><span class="ok">OK</span>', 50],
+    ['<span class="dim">loading kernel /sys/pip.bin .... </span><span class="ok">[ok]</span>', 50],
+    ['<span class="dim">mounting /logs ................. </span><span class="ok">[ok]</span>', 50],
+    ['<span class="dim">calibrating amber terminal ..... </span><span class="ok">[ok]</span>', 50],
+    ['<span class="warn">WARNING:</span><span class="dim"> no coffee detected. proceeding anyway.</span>', 80],
+    ['<span class="ok">READY.</span>', 0],
+  ];
+
+  var container = document.getElementById('boot-lines');
+  var delay = 0;
+  lines.forEach(function(pair) {
+    var html = pair[0], wait = pair[1];
+    delay += wait;
+    setTimeout(function() {
+      var div = document.createElement('div');
+      div.className = 'boot-line';
+      div.innerHTML = html;
+      container.appendChild(div);
+    }, delay);
+  });
+
+  delay += 480;
+  var timer = setTimeout(dismiss, delay);
+
+  function dismiss() {
+    clearTimeout(timer);
+    screen.classList.add('fade-out');
+    setTimeout(function() { screen.style.display = 'none'; }, 440);
+  }
+
+  screen.addEventListener('click', dismiss);
+  document.addEventListener('keydown', function handler(e) {
+    document.removeEventListener('keydown', handler);
+    dismiss();
+  }, { once: true });
+})();
+</script>
+
+</body>
+</html>

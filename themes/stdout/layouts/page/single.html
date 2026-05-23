@@ -1,0 +1,72 @@
+{{ define "main" }}
+
+{{ $about := hugo.Data.about }}
+{{ $posts := where .Site.RegularPages "Type" "posts" }}
+
+{{ if $about }}
+<div class="about-wrap">
+
+  <!-- left col: bio + links -->
+  <div>
+    <div class="about-handle phos-hi">@{{ $about.handle }}</div>
+    <div class="about-host phos-dim">host: {{ $about.host }} &middot; uptime {{ $about.uptime }}</div>
+    <div class="about-bio">{{ $about.bio }}</div>
+
+    <div class="about-channels-head phos-hi">&#9658; CHANNELS</div>
+    <div class="about-links">
+      {{ range $about.links }}
+      <span class="about-link-label phos-dim">{{ .label }}</span>
+      <a class="about-link-val phos-hi" href="{{ .href }}" target="_blank" rel="noreferrer">{{ .value }}</a>
+      {{ end }}
+    </div>
+  </div>
+
+  <!-- right col: stats -->
+  <div class="about-stats">
+    <div class="about-stats-head phos-hi">&#9658; LOG.STATS</div>
+
+    {{ $totalWords := 0 }}
+    {{ $totalMins  := 0 }}
+    {{ range $posts }}
+      {{ $totalWords = add $totalWords .WordCount }}
+      {{ $totalMins  = add $totalMins  .ReadingTime }}
+    {{ end }}
+    {{ $avgMin := 0 }}
+    {{ if gt (len $posts) 0 }}{{ $avgMin = div $totalMins (len $posts) }}{{ end }}
+
+    <div class="about-metrics">
+      <div class="metric-card">
+        <div class="metric-label phos-dim">ENTRIES</div>
+        <div class="metric-value phos-hi">{{ len $posts }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label phos-dim">TOTAL.WORDS</div>
+        <div class="metric-value phos-hi">{{ $totalWords }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label phos-dim">AVG.MINS</div>
+        <div class="metric-value phos-hi">{{ $avgMin }}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label phos-dim">TAGS</div>
+        <div class="metric-value phos-hi">{{ len .Site.Taxonomies.tags }}</div>
+      </div>
+    </div>
+
+    {{ with .Content }}
+    <div class="prose" style="font-size:15px">{{ . }}</div>
+    {{ end }}
+
+    <div class="about-built phos-dim">built with {{ $about.built_with }}</div>
+  </div>
+
+</div>
+{{ else }}
+<!-- fallback: plain page content -->
+<div style="height:100%;overflow:auto">
+  <div class="page-head phos-dim">&#9658; {{ .Title | upper }}</div>
+  <div class="prose" style="max-width:760px">{{ .Content }}</div>
+</div>
+{{ end }}
+
+{{ end }}

@@ -1,0 +1,124 @@
+{{ define "main" }}
+
+{{ $tag := index .Params.tags 0 | default "" }}
+
+<div class="post-wrap">
+
+  <!-- scroll progress bar (driven by JS) -->
+  <div class="post-progress">
+    <div class="post-progress-bar" id="post-progress-bar" style="width:0%"></div>
+  </div>
+
+  <div class="post-inner">
+
+    <!-- main column -->
+    <div class="post-main">
+      <a href="/posts/" class="post-back-btn">&#9666; back to log</a>
+
+      <div class="post-title phos-hi">{{ .Title }}</div>
+
+      <div class="post-filemeta phos-dim">
+        posts/{{ .Slug }}.md &middot; {{ .Date.Format "2006-01-02" }} &middot; {{ .ReadingTime }}min &middot;
+        <a href="{{ "/tags/" | relURL }}{{ $tag | urlize }}"
+           style="color: {{ if eq ($tag | upper) "POSTMORTEM" }}var(--phos-accent){{ else }}var(--phos){{ end }}; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px;">
+          [{{ $tag | upper }}]
+        </a>
+      </div>
+
+      <div class="post-body-scroll" id="post-body-scroll">
+        <div class="prose">
+          {{ .Content }}
+        </div>
+
+        <div class="post-nav-grid">
+          {{ with .PrevInSection }}
+          <a href="{{ .RelPermalink }}" class="post-nav-link">
+            <div class="post-nav-dir phos-dim">&#9666; PREVIOUS</div>
+            <div class="post-nav-title phos-hi">{{ .Title }}</div>
+          </a>
+          {{ else }}<div></div>{{ end }}
+          {{ with .NextInSection }}
+          <a href="{{ .RelPermalink }}" class="post-nav-link" style="text-align:right">
+            <div class="post-nav-dir phos-dim">NEXT &#9656;</div>
+            <div class="post-nav-title phos-hi">{{ .Title }}</div>
+          </a>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+
+    <!-- sidebar telemetry -->
+    <aside class="post-sidebar">
+      <div>
+        <div class="sidebar-head phos-hi">&#9658; TELEMETRY</div>
+        {{ $words := .WordCount }}
+        {{ $lines := (split .RawContent "\n") | len }}
+        {{ $mins  := .ReadingTime }}
+
+        <div class="stat-row">
+          <span class="stat-label phos-dim">WORDS</span>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width:{{ math.Min 100 (div (mul $words 100) 1200) }}%"></div>
+          </div>
+          <span class="stat-value phos-hi">{{ $words }}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label phos-dim">LINES</span>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width:{{ math.Min 100 (div (mul $lines 100) 60) }}%"></div>
+          </div>
+          <span class="stat-value phos-hi">{{ $lines }}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label phos-dim">READ.MIN</span>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width:{{ math.Min 100 (div (mul $mins 100) 10) }}%"></div>
+          </div>
+          <span class="stat-value phos-hi">{{ $mins }}</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label phos-dim">SCROLL</span>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" id="scroll-bar-fill" style="width:0%"></div>
+          </div>
+          <span class="stat-value phos-hi" id="scroll-pct">0</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-head phos-hi">&#9658; KEYS</div>
+        <div class="phos-dim" style="font-size:13px;line-height:1.7">
+          [esc] back<br>[1-5] switch tab
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<script>
+(function() {
+  var scroller = document.getElementById('post-body-scroll');
+  var bar      = document.getElementById('post-progress-bar');
+  var pct      = document.getElementById('scroll-pct');
+  var fillBar  = document.getElementById('scroll-bar-fill');
+  if (!scroller || !bar) return;
+
+  scroller.addEventListener('scroll', function() {
+    var max = scroller.scrollHeight - scroller.clientHeight;
+    var p   = max > 0 ? Math.round(scroller.scrollTop / max * 100) : 100;
+    bar.style.width = p + '%';
+    if (fillBar) fillBar.style.width = p + '%';
+    if (pct)     pct.textContent = p;
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' || e.key === 'Backspace') {
+      e.preventDefault();
+      history.back();
+    }
+  });
+})();
+</script>
+
+{{ end }}

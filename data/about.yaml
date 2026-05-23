@@ -1,0 +1,12 @@
+handle: sagnik
+host: devbox
+bio: "backend engineer, distributed systems enthusiast, accidental keyboard nerd. this is core-dump — where i write down the things i had to learn the hard way."
+links:
+  - label: "GITHUB"
+    value: "github.com/palSagnik"
+    href: "https://github.com/palSagnik"
+  - label: "EMAIL"
+    value: "sagnik@example.com"
+    href: "mailto:sagnik@example.com"
+uptime: "online"
+built_with: "hugo, vim, and stubbornness"

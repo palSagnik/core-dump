@@ -1,0 +1,36 @@
+{{ define "main" }}
+
+{{ $tag := .Title }}
+
+<div class="log-wrap">
+
+  <div class="page-head phos-dim">
+    &#9658; /recordings/devlog &middot; {{ len .Pages }} {{ if eq (len .Pages) 1 }}entry{{ else }}entries{{ end }} &middot; filter [{{ $tag | upper }}]
+  </div>
+
+  {{ if .Pages }}
+  <div class="log-list" id="post-list">
+    {{ range $i, $p := .Pages }}
+    <a class="post-row" href="{{ $p.RelPermalink }}" data-href="{{ $p.RelPermalink }}">
+      <span class="post-row-num phos-hi">&nbsp; {{ printf "%02d" (add $i 1) }}</span>
+      <div class="post-row-body">
+        <div class="post-row-title phos-hi">{{ $p.Title }}</div>
+        {{ with $p.Summary }}
+        <div class="post-row-summary phos-dim">{{ . | plainify | truncate 120 }}</div>
+        {{ end }}
+      </div>
+      <span class="post-row-date phos-dim">{{ $p.Date.Format "2006-01-02" }}</span>
+      <span class="post-row-tag{{ if eq ($tag | upper) "POSTMORTEM" }} accent{{ end }}">{{ $tag | upper }}</span>
+    </a>
+    {{ end }}
+  </div>
+  {{ else }}
+  <div class="empty-state">
+    <div class="empty-state-line1">&#9658; NO RECORDS</div>
+    <div class="empty-state-line2">no entries tagged [{{ $tag | upper }}]</div>
+  </div>
+  {{ end }}
+
+</div>
+
+{{ end }}

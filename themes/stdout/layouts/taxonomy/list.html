@@ -1,0 +1,47 @@
+{{ define "main" }}
+
+{{ $tags := .Site.Taxonomies.tags }}
+
+<div class="tags-wrap">
+
+  <div class="page-head phos-dim">
+    &#9658; index by category &middot; {{ len $tags }} categories &middot; {{ len .Site.RegularPages }} entries
+  </div>
+
+  {{ if $tags }}
+
+  <div class="tags-grid">
+    {{ range $name, $pages := $tags }}
+    {{ $upper := $name | upper }}
+    <a class="tag-card" href="{{ "/tags/" | relURL }}{{ $name | urlize }}">
+      <div class="tag-card-name{{ if eq $upper "POSTMORTEM" }} accent{{ end }}">{{ $upper }}</div>
+      <div class="tag-card-count phos-dim">{{ len $pages }} {{ if eq (len $pages) 1 }}entry{{ else }}entries{{ end }}</div>
+      <div class="tag-card-posts">
+        {{ range first 3 $pages }}
+        <div class="tag-card-post">· {{ .Title }}</div>
+        {{ end }}
+      </div>
+    </a>
+    {{ end }}
+  </div>
+
+  <div class="tags-all-head phos-hi">&#9658; ALL TAGS</div>
+  <div class="tags-pills">
+    {{ range $name, $pages := $tags }}
+    {{ $upper := $name | upper }}
+    <a class="tags-pill{{ if eq $upper "POSTMORTEM" }} accent{{ end }}" href="{{ "/tags/" | relURL }}{{ $name | urlize }}">
+      #{{ $name | lower }} <span class="tags-pill-count phos-dim">{{ len $pages }}</span>
+    </a>
+    {{ end }}
+  </div>
+
+  {{ else }}
+  <div class="empty-state">
+    <div class="empty-state-line1">&#9658; NO TAGS YET</div>
+    <div class="empty-state-line2">entries will appear here once tagged</div>
+  </div>
+  {{ end }}
+
+</div>
+
+{{ end }}

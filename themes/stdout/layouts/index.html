@@ -1,0 +1,114 @@
+{{ define "main" }}
+
+{{ $now   := hugo.Data.now }}
+{{ $about := hugo.Data.about }}
+
+<div class="home-wrap">
+
+  <!-- READ.ME -->
+  <section>
+    <div class="home-readme-path phos-dim">&#9658; /home/{{ with $about }}{{ .handle }}{{ else }}{{ .Site.Params.author | default "you" | lower }}{{ end }} &middot; READ.ME</div>
+    <div class="home-handle">hi, i'm @{{ with $about }}{{ .handle }}{{ else }}{{ .Site.Params.author | default "you" | lower }}{{ end }}.</div>
+    <div class="home-bio">
+      {{ with $about }}{{ .bio }}{{ else }}{{ .Site.Params.description }}{{ end }}
+    </div>
+  </section>
+
+  <!-- NOW -->
+  {{ with $now }}
+  <section class="now-box">
+    <div class="now-box-label">&#9658; /now</div>
+    <div class="now-meta phos-dim">
+      last update {{ .updated }}{{ with .location }} &middot; {{ . }}{{ end }}{{ with .status }} &middot; &ldquo;{{ . }}&rdquo;{{ end }}
+    </div>
+    <div class="now-grid">
+
+      {{ with .working_on }}
+      <div class="now-block">
+        <div class="now-block-label">WORKING.ON</div>
+        <div class="now-block-items">
+          {{ range . }}
+          <div class="now-item">
+            <span class="now-item-bullet">&#9642;</span>
+            <span class="now-item-text">
+              {{ .text }}{{ with .link }}<a href="{{ .href }}">{{ .text }}</a>{{ end }}{{ with .after }}{{ . }}{{ end }}
+            </span>
+          </div>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+
+      {{ with .reading }}
+      <div class="now-block">
+        <div class="now-block-label">READING</div>
+        <div class="now-block-items">
+          {{ range . }}
+          <div class="now-item">
+            <span class="now-item-bullet">&#9642;</span>
+            <span class="now-item-text">{{ .text }}</span>
+          </div>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+
+      {{ with .broke_this_week }}
+      <div class="now-block">
+        <div class="now-block-label">BROKE.THIS.WEEK</div>
+        <div class="now-block-items">
+          {{ range . }}
+          <div class="now-item">
+            <span class="now-item-bullet">&#9642;</span>
+            <span class="now-item-text">
+              {{ .text }}{{ with .link }}<a href="{{ .href }}">{{ .text }}</a>{{ end }}{{ with .after }}{{ . }}{{ end }}
+            </span>
+          </div>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
+
+      {{ with .listening }}
+      <div class="now-block">
+        <div class="now-block-label">LISTENING</div>
+        <div class="now-block-items">
+          <div class="now-item">
+            <span class="now-item-bullet">&#9642;</span>
+            <span class="now-item-text">{{ . }}</span>
+          </div>
+        </div>
+      </div>
+      {{ end }}
+
+    </div>
+  </section>
+  {{ end }}
+
+  <!-- RECENT LOG -->
+  {{ $posts := where .Site.RegularPages "Type" "posts" }}
+  {{ if $posts }}
+  <section>
+    <div class="recent-header">
+      <div class="recent-title">&#9658; RECENT.LOG</div>
+      <a href="/posts/" class="recent-all phos-dim">see all {{ len $posts }} entries &rarr;</a>
+    </div>
+    <div class="recent-list" id="post-list">
+      {{ range $i, $p := first 4 $posts }}
+      <a class="recent-item" href="{{ $p.RelPermalink }}" data-href="{{ $p.RelPermalink }}">
+        <span class="recent-idx phos-dim">{{ printf "%02d" (add $i 1) }}</span>
+        <span class="recent-title-text phos-hi">{{ $p.Title }}</span>
+        <span class="recent-date phos-dim">{{ $p.Date.Format "2006-01-02" }}</span>
+        {{ $tag := index $p.Params.tags 0 | default "" }}
+        <span class="tag-pill{{ if eq $tag "POSTMORTEM" }} accent{{ end }}">{{ $tag | upper }}</span>
+      </a>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  <div class="home-tip phos-dim">press [/] to search &nbsp;&middot;&nbsp; [1&ndash;5] to switch tab</div>
+
+</div>
+
+{{ end }}

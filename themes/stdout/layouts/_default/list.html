@@ -1,0 +1,39 @@
+{{ define "main" }}
+
+{{ $posts := where .Site.RegularPages "Type" "posts" }}
+{{ $tag   := .Title }}
+{{ $isTag := .IsSection | not | and (ne .Kind "home") }}
+
+<div class="log-wrap">
+
+  <div class="page-head phos-dim">
+    &#9658; /recordings/devlog &middot; {{ len $posts }} {{ if eq (len $posts) 1 }}entry{{ else }}entries{{ end }}{{ with $tag }}{{ if ne . "Posts" }} &middot; filter [{{ . | upper }}]{{ end }}{{ end }}
+  </div>
+
+  {{ if $posts }}
+  <div class="log-list" id="post-list">
+    {{ range $i, $p := $posts }}
+    <a class="post-row" href="{{ $p.RelPermalink }}" data-href="{{ $p.RelPermalink }}">
+      <span class="post-row-num phos-hi">{{ if eq . (index $posts 0) }}&#9658;{{ else }}&nbsp;{{ end }} {{ printf "%02d" (add $i 1) }}</span>
+      <div class="post-row-body">
+        <div class="post-row-title phos-hi">{{ $p.Title }}</div>
+        {{ with $p.Summary }}
+        <div class="post-row-summary phos-dim">{{ . | plainify | truncate 120 }}</div>
+        {{ end }}
+      </div>
+      <span class="post-row-date phos-dim">{{ $p.Date.Format "2006-01-02" }}</span>
+      {{ $t := index $p.Params.tags 0 | default "" }}
+      <span class="post-row-tag{{ if eq ($t | upper) "POSTMORTEM" }} accent{{ end }}">{{ $t | upper }}</span>
+    </a>
+    {{ end }}
+  </div>
+  {{ else }}
+  <div class="empty-state">
+    <div class="empty-state-line1">&#9658; NO RECORDS ON THIS CHANNEL</div>
+    <div class="empty-state-line2">the log is empty</div>
+  </div>
+  {{ end }}
+
+</div>
+
+{{ end }}

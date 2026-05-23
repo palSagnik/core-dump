@@ -1,0 +1,25 @@
+{{ define "main" }}
+
+<div class="search-wrap">
+
+  <div class="page-head phos-dim">&#9658; /recordings/devlog &middot; grep</div>
+
+  <div class="search-box">
+    <span class="search-arrow phos-hi">&#9658;</span>
+    <input
+      type="text"
+      id="search-input"
+      class="search-input"
+      placeholder="grep titles, body, tags…"
+      autocomplete="off"
+      autofocus
+    />
+  </div>
+
+  <div id="search-results" class="search-results"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+
+{{ end }}
