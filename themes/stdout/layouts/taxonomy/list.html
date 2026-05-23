@@ -13,7 +13,7 @@
   <div class="tags-grid">
     {{ range $name, $pages := $tags }}
     {{ $upper := $name | upper }}
-    <a class="tag-card" href="{{ "/tags/" | relURL }}{{ $name | urlize }}">
+    <a class="tag-card" href="{{ print "tags/" ($name | urlize) | relURL }}">
       <div class="tag-card-name{{ if eq $upper "POSTMORTEM" }} accent{{ end }}">{{ $upper }}</div>
       <div class="tag-card-count phos-dim">{{ len $pages }} {{ if eq (len $pages) 1 }}entry{{ else }}entries{{ end }}</div>
       <div class="tag-card-posts">
@@ -29,7 +29,7 @@
   <div class="tags-pills">
     {{ range $name, $pages := $tags }}
     {{ $upper := $name | upper }}
-    <a class="tags-pill{{ if eq $upper "POSTMORTEM" }} accent{{ end }}" href="{{ "/tags/" | relURL }}{{ $name | urlize }}">
+    <a class="tags-pill{{ if eq $upper "POSTMORTEM" }} accent{{ end }}" href="{{ print "tags/" ($name | urlize) | relURL }}">
       #{{ $name | lower }} <span class="tags-pill-count phos-dim">{{ len $pages }}</span>
     </a>
     {{ end }}

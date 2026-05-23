@@ -4,12 +4,11 @@
     '2': '/posts/',
     '3': '/tags/',
     '4': '/about/',
-    '5': '/search/',
   };
 
   var base = (function() {
     var b = document.querySelector('meta[name="base-url"]');
-    if (b) return b.getAttribute('content').replace(/\/$/, '');
+    if (b) return b.getAttribute('content').replace(/\/+$/, '');
     return '';
   })();
 
@@ -35,6 +34,11 @@
     if (!el) return;
     var href = el.getAttribute('data-href') || el.getAttribute('href');
     if (href) window.location.href = href;
+  }
+
+  function initSelection() {
+    var rows = getRows();
+    if (rows.length && !selectedRow()) selectRow(rows[0]);
   }
 
   document.addEventListener('keydown', function(e) {
@@ -73,11 +77,7 @@
       openSelected();
       return;
     }
-
-    if (e.key === '/' ) {
-      e.preventDefault();
-      window.location.href = base + '/search/';
-      return;
-    }
   });
+
+  document.addEventListener('DOMContentLoaded', initSelection);
 })();

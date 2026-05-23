@@ -11,6 +11,7 @@
     {{- end -}}
   </title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
+  <meta name="base-url" content="{{ .Site.BaseURL }}" />
 
   {{ $css := resources.Get "css/main.css" | minify }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" />
@@ -18,6 +19,13 @@
   {{ if .Site.Params.favicon }}
   <link rel="icon" href="{{ .Site.Params.favicon }}" />
   {{ end }}
+
+  <script>
+  (function() {
+    var t = localStorage.getItem('piplog-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+  </script>
 </head>
 <body>
 
@@ -39,10 +47,13 @@
           <div class="pip-header-left">
             <a href="{{ .Site.BaseURL }}" class="pip-logo">{{ .Site.Title }}</a>
           </div>
-          <span class="pip-clock" id="pip-clock">
-            <span id="pip-hhmm">00:00</span><span class="sec" id="pip-sec">:00</span>
-          </span>
-        </div>
+          <div class="pip-header-right">
+            <button id="theme-toggle" class="theme-btn" aria-label="toggle light/dark mode"><span id="theme-icon">&#9680;</span></button>
+            <span class="pip-clock" id="pip-clock">
+              <span id="pip-hhmm">00:00</span><span class="sec" id="pip-sec">:00</span>
+            </span>
+          </div>
+        </div><!-- .pip-header-top -->
 
         <nav class="pip-tabs">
           {{ $p := . }}
@@ -65,9 +76,9 @@
       <footer class="pip-footer">
         <span class="pip-footer-hints" id="pip-hints">
           {{- if .IsHome -}}
-            [1&#x2013;5] switch tab &nbsp;&middot;&nbsp; [/] search log
+            [1&#x2013;4] switch tab
           {{- else if (eq .Type "posts") -}}
-            [&uarr;&darr;] select &nbsp;&middot;&nbsp; [enter] open &nbsp;&middot;&nbsp; [/] search &nbsp;&middot;&nbsp; [1&#x2013;5] tab
+            [&uarr;&darr;] select &nbsp;&middot;&nbsp; [enter] open &nbsp;&middot;&nbsp; [1&#x2013;4] tab
           {{- else -}}
             [esc] back &nbsp;&middot;&nbsp; [1&#x2013;5] tab
           {{- end -}}
@@ -80,7 +91,6 @@
 </div><!-- #root -->
 
 <script src="/js/nav.js" defer></script>
-<script src="/js/search.js" defer></script>
 
 <!-- Live clock -->
 <script>
@@ -150,6 +160,23 @@
     document.removeEventListener('keydown', handler);
     dismiss();
   }, { once: true });
+})();
+</script>
+
+<!-- Theme toggle -->
+<script>
+(function() {
+  var btn  = document.getElementById('theme-toggle');
+  var icon = document.getElementById('theme-icon');
+  var html = document.documentElement;
+  var key  = 'piplog-theme';
+  icon.textContent = html.getAttribute('data-theme') === 'dark' ? '◐' : '●';
+  btn.addEventListener('click', function() {
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem(key, next);
+    icon.textContent = next === 'light' ? '●' : '◐';
+  });
 })();
 </script>
 

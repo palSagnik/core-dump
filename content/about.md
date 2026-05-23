@@ -4,9 +4,9 @@ layout = "single"
 type = "page"
 +++
 
-Hey, I'm **Sagnik Pal** — a developer who writes about things I'm learning, building, and thinking about.
+Hey, I'm **Sagnik Pal** — an engineer who writes about things I'm learning, building, and thinking about.
 
-This blog is my `core-dump`. Raw thoughts, technical notes, and the occasional rant.
+This blog is the accumulation of raw thoughts, technical notes, and the occasional rant.
 
 ## stack
 

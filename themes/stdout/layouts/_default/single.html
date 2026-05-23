@@ -19,7 +19,7 @@
 
       <div class="post-filemeta phos-dim">
         posts/{{ .Slug }}.md &middot; {{ .Date.Format "2006-01-02" }} &middot; {{ .ReadingTime }}min &middot;
-        <a href="{{ "/tags/" | relURL }}{{ $tag | urlize }}"
+        <a href="{{ print "tags/" ($tag | urlize) | relURL }}"
            style="color: {{ if eq ($tag | upper) "POSTMORTEM" }}var(--phos-accent){{ else }}var(--phos){{ end }}; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px;">
           [{{ $tag | upper }}]
         </a>
@@ -85,12 +85,6 @@
         </div>
       </div>
 
-      <div>
-        <div class="sidebar-head phos-hi">&#9658; KEYS</div>
-        <div class="phos-dim" style="font-size:13px;line-height:1.7">
-          [esc] back<br>[1-5] switch tab
-        </div>
-      </div>
     </aside>
 
   </div>

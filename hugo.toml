@@ -7,7 +7,7 @@ theme = "stdout"
   pagerSize = 10
 
 [outputs]
-  home = ["HTML", "JSON"]
+  home = ["HTML"]
 
 [params]
   description = "A minimal dev blog"
@@ -16,7 +16,7 @@ theme = "stdout"
 
 [markup]
   [markup.highlight]
-    style = "vim"
+    style = "monokai"
     lineNos = false
     noClasses = true
   [markup.goldmark.renderer]
@@ -45,7 +45,3 @@ theme = "stdout"
   pageRef = "about"
   weight  = 4
 
-[[menus.main]]
-  name    = "search"
-  pageRef = "search"
-  weight  = 5

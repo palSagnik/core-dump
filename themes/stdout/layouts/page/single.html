@@ -8,17 +8,21 @@
 
   <!-- left col: bio + links -->
   <div>
+    <pre class="about-ascii phos-hi">       ▲
+      ▲▲▲
+     ▲▲ ▲▲
+    ▲▲▲▲▲▲▲
+    █▒▒▒▒▒█
+    █▒░░░▒█
+    █▒░·░▒█
+    █▒░░░▒█
+    █▒▒▒▒▒█
+    ▼ ▼ ▼ ▼
+     ✦ · ✦</pre>
     <div class="about-handle phos-hi">@{{ $about.handle }}</div>
     <div class="about-host phos-dim">host: {{ $about.host }} &middot; uptime {{ $about.uptime }}</div>
     <div class="about-bio">{{ $about.bio }}</div>
 
-    <div class="about-channels-head phos-hi">&#9658; CHANNELS</div>
-    <div class="about-links">
-      {{ range $about.links }}
-      <span class="about-link-label phos-dim">{{ .label }}</span>
-      <a class="about-link-val phos-hi" href="{{ .href }}" target="_blank" rel="noreferrer">{{ .value }}</a>
-      {{ end }}
-    </div>
   </div>
 
   <!-- right col: stats -->

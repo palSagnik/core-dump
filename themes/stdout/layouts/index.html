@@ -91,7 +91,7 @@
   <section>
     <div class="recent-header">
       <div class="recent-title">&#9658; RECENT.LOG</div>
-      <a href="/posts/" class="recent-all phos-dim">see all {{ len $posts }} entries &rarr;</a>
+      <a href="/core-dump/posts/" class="recent-all phos-dim">see all {{ len $posts }} entries &rarr;</a>
     </div>
     <div class="recent-list" id="post-list">
       {{ range $i, $p := first 4 $posts }}
@@ -99,15 +99,14 @@
         <span class="recent-idx phos-dim">{{ printf "%02d" (add $i 1) }}</span>
         <span class="recent-title-text phos-hi">{{ $p.Title }}</span>
         <span class="recent-date phos-dim">{{ $p.Date.Format "2006-01-02" }}</span>
-        {{ $tag := index $p.Params.tags 0 | default "" }}
-        <span class="tag-pill{{ if eq $tag "POSTMORTEM" }} accent{{ end }}">{{ $tag | upper }}</span>
+        <span class="recent-tags">{{ range $p.Params.tags }}<span class="tag-pill{{ if eq (. | upper) "POSTMORTEM" }} accent{{ end }}" onclick="event.preventDefault();event.stopPropagation();window.location='{{ print "tags/" (. | urlize) | relURL }}'">{{ . | upper }}</span>{{ end }}</span>
       </a>
       {{ end }}
     </div>
   </section>
   {{ end }}
 
-  <div class="home-tip phos-dim">press [/] to search &nbsp;&middot;&nbsp; [1&ndash;5] to switch tab</div>
+  <div class="home-tip phos-dim">[1&ndash;4] to switch tab</div>
 
 </div>
 

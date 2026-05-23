@@ -5,7 +5,7 @@
 
   var base = (function() {
     var b = document.querySelector('meta[name="base-url"]');
-    if (b) return b.getAttribute('content').replace(/\/$/, '');
+    if (b) return b.getAttribute('content').replace(/\/+$/, '');
     return '';
   })();
 

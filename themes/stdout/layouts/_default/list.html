@@ -22,8 +22,7 @@
         {{ end }}
       </div>
       <span class="post-row-date phos-dim">{{ $p.Date.Format "2006-01-02" }}</span>
-      {{ $t := index $p.Params.tags 0 | default "" }}
-      <span class="post-row-tag{{ if eq ($t | upper) "POSTMORTEM" }} accent{{ end }}">{{ $t | upper }}</span>
+      <span class="post-row-tags">{{ range $p.Params.tags }}<span class="post-row-tag{{ if eq (. | upper) "POSTMORTEM" }} accent{{ end }}" onclick="event.preventDefault();event.stopPropagation();window.location='{{ print "tags/" (. | urlize) | relURL }}'">{{ . | upper }}</span>{{ end }}</span>
     </a>
     {{ end }}
   </div>
