@@ -1,18 +1,18 @@
-updated: "2026-05-22"
+updated: "2026-05"
 location: "india"
 status: "shipping more than i'm reading. need to fix that."
 
 working_on:
-  - text: "improving core-dump blog with a phosphor CRT aesthetic"
-  - text: "a small DSL for type-safe SQL migrations"
-  - text: "this devlog. always this devlog."
+  - text: "improving the observability stack at Blinkit"
+  - text: "a small working chip-8 emulator"
+  - text: "blogs for this devlog. always this devlog."
 
 reading:
-  - text: "Designing Data-Intensive Applications, ch.7"
-  - text: "old patches to ext4 around journaling modes"
+  - text: "The Linux Programming Interface"
+  - text: "Learning ebpf by Liz Rice"
 
 broke_this_week:
-  - text: "the staging cluster (forgot to reset replication)"
-  - text: "my keyboard's space bar"
+  - text: "very sadly nothing"
+  - text: "keyboard"
 
-listening: "shellac, dub techno, the occasional sad piano"
+listening: "the 1975, frank ocean, the occasional Sabrina"
