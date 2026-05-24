@@ -1,4 +1,4 @@
-baseURL = "https://palSagnik.github.io/core-dump/"
+baseURL = "https://palsagnik.github.io/core-dump/"
 locale = "en-us"
 title = "core-dump"
 theme = "stdout"

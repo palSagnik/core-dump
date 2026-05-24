@@ -16,5 +16,5 @@ This blog is the accumulation of raw thoughts, technical notes, and the occasion
 
 ## elsewhere
 
-- GitHub: [github.com/yourhandle](https://github.com)
-- Email: you@example.com
+- GitHub: [github.com/palSagnik](https://github.com/palSagnik)
+- Email: palsagnik2102@gmail.com
