@@ -15,17 +15,17 @@
     <div class="post-main">
       <a href="/core-dump/posts/" class="post-back-btn">&#9666; back to log</a>
 
-      <div class="post-title phos-hi">{{ .Title }}</div>
-
-      <div class="post-filemeta phos-dim">
-        posts/{{ .Slug }}.md &middot; {{ .Date.Format "2006-01-02" }} &middot; {{ .ReadingTime }}min &middot;
-        <a href="{{ print "tags/" ($tag | urlize) | relURL }}"
-           style="color: {{ if eq ($tag | upper) "POSTMORTEM" }}var(--phos-accent){{ else }}var(--phos){{ end }}; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px;">
-          [{{ $tag | upper }}]
-        </a>
-      </div>
-
       <div class="post-body-scroll" id="post-body-scroll">
+        <div class="post-title phos-hi">{{ .Title }}</div>
+
+        <div class="post-filemeta phos-dim">
+          posts/{{ .Slug }}.md &middot; {{ .Date.Format "2006-01-02" }} &middot; {{ .ReadingTime }}min &middot;
+          <a href="{{ print "tags/" ($tag | urlize) | relURL }}"
+             style="color: {{ if eq ($tag | upper) "POSTMORTEM" }}var(--phos-accent){{ else }}var(--phos){{ end }}; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px;">
+            [{{ $tag | upper }}]
+          </a>
+        </div>
+
         <div class="prose">
           {{ .Content }}
         </div>
