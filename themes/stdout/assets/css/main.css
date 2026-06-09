@@ -825,29 +825,10 @@ body::before {
   line-height: 1.6;
 }
 
-.prose pre code { background: none; border: none; padding: 0; color: var(--phos); font-size: inherit; }
+.prose pre code { background: none; border: none; padding: 0; color: inherit; font-size: inherit; }
 .prose .highlight { margin-bottom: 1.5em; }
 .prose .highlight pre { margin: 0; }
 .prose .chroma { background: var(--phos-bg-2); }
-
-.prose .code-block { position: relative; margin-bottom: 1.5em; }
-.prose .code-block .highlight { margin-bottom: 0; }
-.prose .code-lang {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-family: var(--mono-clean);
-  font-size: 0.68rem;
-  letter-spacing: 0.07em;
-  color: var(--phos-dim);
-  background: var(--phos-bg-2);
-  border-left: 1px solid var(--phos-veryDim);
-  border-bottom: 1px solid var(--phos-veryDim);
-  padding: 0.18em 0.55em;
-  z-index: 1;
-  pointer-events: none;
-  user-select: none;
-}
 
 /* ─── TAGS page ─────────────────────────────────────── */
 .tags-wrap { height: 100%; overflow: auto; }
