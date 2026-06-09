@@ -1,6 +1,6 @@
 +++
 title = "Investigating a Vector Daemonset Pod Failure"
-date = 2026-06-8
+date = 2026-06-08
 draft = false
 tags = ["post-mortem", "k8s", "vector"]
 +++
