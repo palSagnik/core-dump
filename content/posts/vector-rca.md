@@ -89,7 +89,7 @@ increase(kube_pod_container_status_restarts_total{
 
 A single sharp restart at ~01:20 IST on 11 May, then flat. The pod restarted once, came back up, and never crashed again. So the `OOMKill` explained the restart but it didn't explain why the pod was still dark nine days later. A restart should have recovered it.
 
-![Pod restart count — single increment at 01:20 IST on 11 May, flat at 2 for the remainder of the window](../assets/vector-rca/kube-pod-restart.png)
+![Pod restart count — single increment at 01:20 IST on 11 May, flat at 2 for the remainder of the window](../../assets/vector-rca/kube-pod-restart.png)
 
 ### Step 2: Verify that Vector components were actually running after restart
 
@@ -104,7 +104,7 @@ sum(rate(vector_utilization{
 
 It hadn't. The `agent_to_warpstream_kafka` component dropped to zero utilisation after 01:20 and never recovered. Every other component showed non-zero utilisation; the source was still reading logs, transforms were still running. Only the Kafka sink was dead.
 
-![Vector component utilisation — agent_to_warpstream_kafka drops to zero at restart while all other components continue](../assets/vector-rca/vector-utilization.png)
+![Vector component utilisation — agent_to_warpstream_kafka drops to zero at restart while all other components continue](../../assets/vector-rca/vector-utilization.png)
 
 ### Step 3: Confirm via buffer metrics
 
@@ -119,7 +119,7 @@ sum(rate(vector_buffer_sent_bytes_total{
 
 The bytes-sent rate for `agent_to_warpstream_kafka` dropped sharply at restart, then the metric series disappeared entirely. Not a value of zero but it just stopped existing. The sink wasn't just slow; it had stopped reporting altogether.
 
-![Buffer sent bytes rate — agent_to_warpstream_kafka series ends completely at restart and never reappears](../assets/vector-rca/vector-buffer-sent-bytes.png)
+![Buffer sent bytes rate — agent_to_warpstream_kafka series ends completely at restart and never reappears](../../assets/vector-rca/vector-buffer-sent-bytes.png)
 
 ### Step 4: Rule out a Kafka-side issue
 
@@ -135,7 +135,7 @@ kube_pod_status_ready{
 
 The pod reported `Ready=True` across all ~480 data points in the 11-day window. No eviction, no further restart, no Kubernetes-side signal of any kind. Combined with every other Vector component running normally, this ruled out a platform-level or Kafka-side failure. The problem was entirely within Vector's Kafka sink.
 
-![Pod readiness — kube_pod_status_ready holds at 1 for the entire 11-day window with no dips](../assets/vector-rca/kube-status-ready.png)
+![Pod readiness — kube_pod_status_ready holds at 1 for the entire 11-day window with no dips](../../assets/vector-rca/kube-status-ready.png)
 
 **The pattern was clear: the process was alive, the source pipeline was running, but the Kafka sink had shut down completely and was not recovering on its own.**
 
@@ -151,7 +151,7 @@ What actually caused the `OOMKill` is up for debate. We know it happened. We don
 
 What we know from metrics: in the ~11 hours before the kill that we could observe, the container was sitting at 993–1,052 MB which is right around its 1 GiB limit. The disk buffer was healthy at ~130 KB immediately before the kill, which rules that out as the memory source. Then at **01:31 IST on 11 May**, it was killed.
 
-![Container memory working set — pre-OOMKill container flat at ~1 GiB, new container starts at ~55 MB and grows slowly](../assets/vector-rca/container-memory-working-bytes.png)
+![Container memory working set — pre-OOMKill container flat at ~1 GiB, new container starts at ~55 MB and grows slowly](../../assets/vector-rca/container-memory-working-bytes.png)
 
 What we don't know: what pushed it fractionally over the limit on that specific night.
 
