@@ -124,13 +124,13 @@
   sessionStorage.setItem('piplog-booted', '1');
 
   var lines = [
-    ['<span class="hi">{{ .Site.Title }}</span><span class="dim"> :: cold start</span>', 60],
-    ['<span class="dim">checking RAM ................... 640k </span><span class="ok">OK</span>', 50],
-    ['<span class="dim">loading kernel /sys/pip.bin .... </span><span class="ok">[ok]</span>', 50],
-    ['<span class="dim">mounting /logs ................. </span><span class="ok">[ok]</span>', 50],
-    ['<span class="dim">calibrating amber terminal ..... </span><span class="ok">[ok]</span>', 50],
-    ['<span class="warn">WARNING:</span><span class="dim"> no coffee detected. proceeding anyway.</span>', 80],
-    ['<span class="ok">READY.</span>', 0],
+    ['<span class="hi">{{ .Site.Title }}</span><span class="dim"> :: cold start</span>', 200],
+    ['<span class="dim">checking RAM ................... 640k </span><span class="ok">OK</span>', 160],
+    ['<span class="dim">loading kernel /sys/pip.bin .... </span><span class="ok">[ok]</span>', 160],
+    ['<span class="dim">mounting /logs ................. </span><span class="ok">[ok]</span>', 160],
+    ['<span class="dim">calibrating amber terminal ..... </span><span class="ok">[ok]</span>', 160],
+    ['<span class="warn">WARNING:</span><span class="dim"> no coffee detected. proceeding anyway.</span>', 260],
+    ['<span class="ok">READY.</span>', 300],
   ];
 
   var container = document.getElementById('boot-lines');
@@ -146,7 +146,7 @@
     }, delay);
   });
 
-  delay += 480;
+  delay += 900;
   var timer = setTimeout(dismiss, delay);
 
   function dismiss() {
