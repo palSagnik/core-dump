@@ -1,0 +1,5 @@
+{{- $lang := .Type -}}
+<div class="code-block">
+  {{- if $lang }}<span class="code-lang">{{ $lang }}</span>{{ end -}}
+  {{ transform.Highlight (trim .Inner "\n\r") $lang "" }}
+</div>
