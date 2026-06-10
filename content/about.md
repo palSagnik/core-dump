@@ -10,7 +10,7 @@ This blog is the accumulation of raw thoughts, technical notes, and the occasion
 
 ## stack
 
-- Languages: whatever the job needs
+- Languages: whatever the job needs, probably
 - Editor: the best one
 - OS: yes
 
