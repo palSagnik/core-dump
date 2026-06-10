@@ -5,8 +5,8 @@ draft = false
 tags = ["post-mortem", "k8s", "vector"]
 +++
 
-**Cluster:** eks-prod-apse1-infra \
-**Node:** ip-172-27-51-17.ap-southeast-1.compute.internal \
+**Cluster:** infra \
+**Node:** ip-X-X-X-X.ap-southeast-1.compute.internal \
 **Duration of silent failure:** ~9.5 days
 
 ---
@@ -35,14 +35,14 @@ The Daemonset agent is the entry point for every log on every node. If it stops 
 
 ## What we saw
 
-One of our engineers initially reported this as missing logs from `vector-spotinst` in the monitoring namespace. What looked like a single-service problem turned out to be a node-wide failure: the Vector Daemonset pod responsible for collecting logs from all pods on node `ip-172-27-51-17` had silently stopped shipping data.
+One of our engineers initially reported this as missing logs from `vector-spotinst` in the monitoring namespace. What looked like a single-service problem turned out to be a node-wide failure: the Vector Daemonset pod responsible for collecting logs from all pods on node `ip-X-X-X-X` had silently stopped shipping data.
 
 Deleting the stuck pod fixed the issue immediately. But this wasn't the first time. We'd seen Vector pods get stuck since introducing it into our pipeline, and this time we wanted to understand why.
 
 Tracing back through metrics, we identified **11 May 2026, ~01:20 IST** as the point where the node went completely dark. At the time of investigation, all pods on the affected node appeared healthy:
 
 ```bash
-kubectl get pods --field-selector spec.nodeName=ip-172-27-51-17.ap-southeast-1.compute.internal
+kubectl get pods --field-selector spec.nodeName=ip-X-X-X-X.ap-southeast-1.compute.internal
 ```
 
 ```
@@ -73,7 +73,7 @@ The pod had restarted once and was currently running. We didn't know yet whether
 
 ```promql
 kube_pod_container_status_last_terminated_reason{
-  cluster="eks-prod-apse1-infra",
+  cluster="infra",
   pod="vector-dvlxl"
 }
 ```
@@ -82,7 +82,7 @@ This came back as `OOMKilled`. The container had exceeded its memory limit and b
 
 ```promql
 increase(kube_pod_container_status_restarts_total{
-  cluster="eks-prod-apse1-infra",
+  cluster="infra",
   pod="vector-dvlxl"
 }[1m])
 ```
@@ -97,7 +97,7 @@ We assumed the restart had fixed things. To check, we looked at component-level 
 
 ```promql
 sum(rate(vector_utilization{
-  cluster="eks-prod-apse1-infra",
+  cluster="infra",
   pod="vector-dvlxl"
 }[2m])) by (component_id)
 ```
@@ -112,7 +112,7 @@ Vector places a buffer in front of each sink to handle backpressure. If the sink
 
 ```promql
 sum(rate(vector_buffer_sent_bytes_total{
-  cluster="eks-prod-apse1-infra",
+  cluster="infra",
   pod="vector-dvlxl"
 }[2m])) by (component_id)
 ```
